@@ -10,6 +10,10 @@ class nginx_proxy (
     group => 'root',
     mode  => '0644',
   }
+  package { $package:
+    ensure => latest,
+    before => [File[$config_path, "${config_path}/${config_file}"], Service[$service]],
+  }
   file { $config_path:
     ensure => directory,
   }
@@ -17,13 +21,8 @@ class nginx_proxy (
     ensure  => file,
     content => epp('nginx_proxy/default.conf.epp', { master_ip => $master_ip }),
   }
-  package { $package:
-    ensure => latest,
-    before => File[$config_path, "${config_path}/${config_file}"],
-  }
   service { $service:
-    ensure  => running,
-    enable  => true,
-    require => Package[$package],
+    ensure => running,
+    enable => true,
   }
 }
