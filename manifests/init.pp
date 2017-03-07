@@ -22,8 +22,8 @@ class nginx_proxy (
     before => File[$config_path, "${config_path}/${config_file}"],
   }
   service { $service:
-    ensure => running,
-    enable => true,
+    ensure  => running,
+    enable  => true,
     require => Package[$package],
   }
 }
