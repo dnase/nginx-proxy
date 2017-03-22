@@ -12,7 +12,7 @@ class nginx_proxy (
   }
   package { $package:
     ensure => latest,
-    before => [File[$config_path, "${config_path}/${config_file}"], Service[$service]],
+    before => File[$config_path, "${config_path}/${config_file}"],
   }
   file { $config_path:
     ensure => directory,
@@ -24,5 +24,6 @@ class nginx_proxy (
   service { $service:
     ensure => running,
     enable => true,
+    subscribe => File["${config_path}/${config_file}"],
   }
 }
